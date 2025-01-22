@@ -1,20 +1,17 @@
-# For more information, please refer to https://aka.ms/vscode-docker-python
 FROM python:3-slim
 
-# Keeps Python from generating .pyc files in the container
+# Variables de entorno para Python
 ENV PYTHONDONTWRITEBYTECODE=1
-
-# Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
-# Instalar dependencias del sistema para Chrome y Selenium
+# Instalar dependencias del sistema, Chrome y Xvfb
 RUN apt-get update && \
   apt-get install -y \
   wget \
   gnupg2 \
   curl \
   unzip \
-  # Dependencias esenciales para Chrome
+  # Dependencias de Chrome
   libnss3 \
   libgbm1 \
   libasound2 \
@@ -29,9 +26,11 @@ RUN apt-get update && \
   libxrandr2 \
   libxtst6 \
   fonts-liberation \
-  xdg-utils && \
+  xdg-utils \
   # Xvfb y dependencias de X11
   xvfb \
+  x11vnc \
+  xserver-xorg-video-dummy && \
   # Instalar Chrome
   wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
   echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
@@ -41,9 +40,9 @@ RUN apt-get update && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
-# Install pip requirements
+# Instalar dependencias de Python
 COPY requirements.txt .
-RUN python -m pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 WORKDIR /app
 COPY . /app
@@ -53,6 +52,6 @@ RUN adduser -u 5678 --disabled-password --gecos "" appuser && \
   chown -R appuser /app
 USER appuser
 
-# During debugging, this entry point will be overridden
+# Comando para iniciar Xvfb y ejecutar la app
 # CMD ["sh", "-c", "Xvfb :99 -screen 0 1024x768x24 & export DISPLAY=:99 && python app.py"]
 CMD ["python", "app.py"]
