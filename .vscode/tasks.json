@@ -19,7 +19,7 @@
 				"docker-build"
 			],
 			"python": {
-				"file": "app.py"
+				"file": "src/app.py"
 			}
 		}
 	]
