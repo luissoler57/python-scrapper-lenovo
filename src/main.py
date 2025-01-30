@@ -4,6 +4,8 @@
         e: _description_
     """
 
+from selenium.common.exceptions import TimeoutException, WebDriverException
+
 from lenovo_scrapper.browser.driver import BrowserDriver
 from lenovo_scrapper.config import selectors, setting
 from lenovo_scrapper.scraper import LenovoWarrantyScraper
@@ -35,8 +37,8 @@ def main():
         result = scraper.perform_search(serial="PF3DGHLB")
         print(result)
 
-    except Exception as e:
-        logger.error("An error occurred: %s", str(e))
+    except (WebDriverException, TimeoutException) as e:
+        logger.error("A browser automation error occurred: %s", str(e))
     finally:
         if driver:
             driver.quit()
