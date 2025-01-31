@@ -34,7 +34,9 @@ def main():
             selectors=selectors.Selectors(),
         )
 
-        result = scraper.perform_search(serial="PF3DGHLB")
+        result = scraper.perform_search(
+            serial="PF3LJXMX", search_text="Warranty & Services"
+        )
         print(result)
 
     except (WebDriverException, TimeoutException) as e:
