@@ -54,4 +54,4 @@ USER appuser
 
 # Comando para iniciar Xvfb y ejecutar la app
 # CMD ["sh", "-c", "Xvfb :99 -screen 0 1024x768x24 & export DISPLAY=:99 && python app.py"]
-CMD ["python", "app.py"]
+CMD ["python", "src/app.py"]
